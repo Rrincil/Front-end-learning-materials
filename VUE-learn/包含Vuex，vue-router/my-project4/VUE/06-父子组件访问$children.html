@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="../node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+  <!-- 使用组件 -->
+  <div id="app"> 
+    <myone></myone>   
+  </div>
+  <!-- 创建模板 -->
+  <template id="d1">
+    <div>{{mes}}
+    <button @click='getmes'>获取父组件</button>
+  </div>
+  </template>
+
+
+  <script>
+ const myone = {
+   template:'#d1',
+   data () {
+     return {
+       mes:{
+         typeof:Text,
+         default:'我是子组件'
+       }
+     }
+   },
+   methods: {
+     // 获取父组件方法this.$parent
+     getmes(){
+        this.$parent.showmes()
+      }
+    
+   }
+ }
+  // 创建实例
+  const one = new Vue({
+    el:'#app',
+    data:{
+
+    },
+    methods: {
+      showmes(){
+       alert("父组件方法")
+     }
+
+      
+    },
+    components: {
+      myone
+       
+     }   
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue学习</title>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <style>
+       
+    </style>
+</head>
+<body>
+
+  <template id="d1">
+    <div>我是标题</div>
+  </template> 
+
+
+
+  <!-- 计算器案例 -->
+   <div id="app">
+    <myjsb></myjsb>
+
+     <button v-html='jian' @click='jianfa'></button>
+     <p>{{shuzi}}</p>
+     <button type="button" v-text='jia' v-on:click='jiafa'></button>
+    </div>
+   
+   <!-- 隐藏显示内容 -->
+    <div id="app1">
+        <p v-show='true'>内容</p>
+        <p v-show='kongzhi' v-bind:opacity='op'>内容</p>
+        <button @click='show3' v-html='message' ></button>
+    </div>
+
+<script>
+
+// 2.注册组件(全局组件,可以在多个实例下使用)
+    // Vue.component('使用的组件标签名',组件构造器)
+    
+    Vue.component('myjsb',{
+      data () {
+        return {
+          
+        }
+      }, template:'#d1'
+
+    });
+
+
+
+
+
+
+
+//  计算器案例 
+var one=new Vue({
+    el:'#app',
+    data:{
+           jian:'<p>减</p>',   
+           jia:'加' ,
+           shuzi:0
+    },
+    methods:{
+        jianfa:function(){
+              if(this.shuzi<1)
+              {
+                alert("不能再减了")
+              }
+              else{
+                this.shuzi-=1
+              }
+        },
+        jiafa:function(){
+            if(this.shuzi>9)
+              {
+                alert("不能再加了")
+              }
+              else{
+                this.shuzi+=1
+              }
+        }
+    }
+})
+
+
+
+
+//  隐藏显示内容 
+var one1=new Vue({
+    el:'#app1',
+    data:{
+           message:'隐藏内容',
+           kongzhi:true,
+           op:0.8
+    },
+    methods:{
+           show1:function(){
+               if(this.kongzhi==false)
+               {
+                this.kongzhi=true;
+               this.message='隐藏内容';
+               }
+              
+
+               else{
+                this.kongzhi=false;
+                this.message='显示内容';
+                  
+               }
+           },
+           //show2取反
+           show2:function(){
+                this.kongzhi=!this.kongzhi;
+                this.message='显示内容';
+           },
+           //num大于18则显示内容
+           show3:function(){
+               //如果第一个div即one中的shuzi大于3则可以切换状态
+                if(one.shuzi>3)
+                {
+                    this.kongzhi=!this.kongzhi;
+                }
+           }
+    }
+})
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue组件化学习1</title>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <style>
+       
+    </style>
+</head>
+<body>
+
+  <!-- 使用组件 -->
+  <div id="app" >
+    <myjsb1 ></myjsb1> 
+   </div>
+
+
+
+  <!-- 父组件中嵌套子组件 -->
+  <template id="d1">
+    <div>
+      <p>{{message}}</p>    <!--父组件data数据 -->
+      <!-- 父组件获取子组件发送的数据用{{shuju}}显示 -->
+      <p>获取子组件的鼠标移入时的id：{{shuju}}</p> 
+     <!-- 用自定义事件发送数据到父组件的jieshou方法中 -->
+      <myjsb2 :mes='xiaoxi' @itemclick='jieshou'></myjsb2>      <!-- 获取父组件内容 -->
+    </div>
+   </template>
+  <!-- 子组件模板 -->
+   <template id="d2">
+    <div>
+      <p>{{message}}</p>
+      <p >选择的{{a}}的id是{{b}}</p>
+      <ul>
+      <p>鼠标移入查看控制台</p>
+      <li v-for='(item,index) in catagories' @mouseenter='fasong(item)'>{{item.fenlei}}</li>
+      </ul>
+      <!-- {{mes}}获取父组件数据 -->
+      <button @click='xinxi'>获取父组件的内容</button>
+    </div>
+   </template>
+
+ 
+
+
+  <script>
+
+    // 2.全局子注册组件(全局组件,可以在多个实例下使用)
+    // Vue.component('使用的组件标签名',组件构造器)template:'#d2'
+  Vue.component('myjsb2',{
+      data () {
+        return {
+          message:"子组件",
+          a:"nihao",
+          b:0,
+          catagories:[
+            {id:11,fenlei:'水果'},
+            {id:22,fenlei:'食物'},
+            {id:33,fenlei:'家具'}
+          ]
+        }
+      }, template:'#d2',
+
+      // props数据用来接收父组件的数据
+      props:['mes'],
+      methods: {
+        xinxi(){
+          this.message=this.mes
+        },
+      // 通过自定义事件来传递数据到父组件
+        huoqu(index){
+          
+          // console.log(index);
+          this.a=this.catagories[index].fenlei;
+          this.b=this.catagories[index].id;
+          //  console.log(a);
+         
+        //子组件发射一个事件
+        },
+        fasong(item){
+          //发射函数this.$emit('自定义事件名',参数)
+          this.$emit('itemclick',item)
+          this.a=item.fenlei;
+          this.b=item.id;
+        }
+      }
+         
+    });
+
+    
+
+
+    //.局部注册父组件(局部组件,只能在注册过的实例下使用)   
+    //在实例内部注册components:{'组件名',组件内容}（组件内容可以抽取出来单独定义）
+ const zujian1={
+        template:'#d1',
+        data () {
+          return {
+            message:'父组件1',
+            xiaoxi:'我是父组件的内容',
+            shuju:''
+          }
+        },
+        methods: {
+          // 自定义方法接收子组件发送的数据
+          jieshou(item){
+                    
+              console.log('1');
+              this.shuju=item.id
+          }
+        }
+        
+ }
+ const zujian2={
+        template:'#d1',
+        data () {
+          return {
+            message:'组件2'
+          }
+        }
+ }
+ const zujian3={
+        template:'#d1',
+        data () {
+          return {
+            message:'组件3'
+          }
+        }
+ }
+ 
+const one=new Vue({
+    el:'#app',
+    data:{     
+      message:'根组件'
+    },
+   
+    components: {
+      // 'myjsb1':myjsb1
+      //对象字面量增强写法的属性增强写法 
+      'myjsb1':zujian1,
+      // 'myjsb2':zujian2,
+      'myjsb3':zujian3,
+      
+      }   
+     
+    
+})
+
+
+
+
+  </script>
+
+</body>
+</html>

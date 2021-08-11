@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>插槽的具名使用</title>
+  <script src="../node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+
+  <!-- 使用插槽 -->
+  <div id="app"> 
+    <!-- <myone>插槽内容增加slot属性</myone>    -->
+    <myone>
+      <span slot="d1">标题</span>
+    </myone>   
+    <!-- 插槽不同内容 -->
+    <myone>
+      
+    </myone>
+  </div>
+  <!-- 创建模板增加多个插槽写名字 -->
+  <template id="d1">
+    <div>
+    <slot name='d1'>左边</span></slot>
+    <slot name='d2'>中间</span></slot>
+    <slot name="d3"><span>右边</span></slot>
+    </div>
+  </template>
+
+
+  <script>
+ const myone = {
+   template:'#d1',
+   data () {
+     return {
+      
+     }
+   }
+  
+ }
+  // 创建实例
+  const one = new Vue({
+    el:'#app',
+    data:{
+
+    },  
+    components: {
+      myone      
+     }   
+  })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="../node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+  <!-- 使用插槽 -->
+  <div id="app"> 
+    <!-- <myone>增加的插槽内容</myone>    -->
+    <myone>
+      <button>我是slot增加的按钮</button>
+    </myone>   
+    <!-- 插槽不同内容 -->
+    <myone>
+      <p>我是slot增加的p标签</p>
+    </myone>
+  </div>
+  <!-- 创建模板增加插槽 -->
+  <template id="d1">
+    <div>{{mes}}
+    <slot></slot>
+  </div>
+  </template>
+
+
+  <script>
+ const myone = {
+   template:'#d1',
+   data () {
+     return {
+       mes:{
+         typeof:Text,
+         default:'我是子组件'
+       }
+     }
+   },
+   methods: {
+     // 获取父组件方法this.$parent
+     getmes(){
+        this.$parent.showmes()
+      }
+    
+   }
+ }
+  // 创建实例
+  const one = new Vue({
+    el:'#app',
+    data:{
+
+    },
+    methods: {
+      showmes(){
+       alert("父组件方法")
+     }
+
+      
+    },
+    components: {
+      myone
+       
+     }   
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue组件化学习1</title>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <style>
+       
+    </style>
+</head>
+<body>
+ <!-- Es5:
+   const a='a'+
+     'b'
+ Es6:
+   const: a=`a
+     b` -->
+  <!-- 组件模板的写法 -->
+  <!-- 第一种写法 script type="text/x-template" id="d2"-->
+  <!-- <script type="text/x-template" id="d2">
+    <div >{{message}}
+    <button @click='xinxi'>{{message}}</button>
+    </div>
+  </script> -->
+  <!-- 第二种写法 template id="d2"-->
+  <!-- 父组件中嵌套子组件 -->
+  <template id="d1">
+    <div>
+      <p>{{message}}</p>    <!--父组件data数据 -->
+      <myjsb2 :mes='xiaoxi'></myjsb2>      <!-- 获取父组件内容 -->
+    </div>
+   </template>
+  <!-- 子组件模板 -->
+   <template id="d2">
+    <div>{{message}}
+      <!-- {{mes}}获取父组件数据 -->
+      <button @click='xinxi'>获取父组件的内容</button>
+    </div>
+   </template>
+
+   <!-- 使用组件 -->
+   <div id="app" >
+    <myjsb1 ></myjsb1> 
+   </div>
+
+
+  <script>
+
+    // 1.创建组件构造器对象
+    //  const jsb =Vue.extend({
+    //   template:'<div><p>你好'+
+    //     '</p></div>'
+    //  })
+
+
+
+    // 2.全局子注册组件(全局组件,可以在多个实例下使用)
+    // Vue.component('使用的组件标签名',组件构造器)template:'#d2'
+  Vue.component('myjsb2',{
+      data () {
+        return {
+          message:"子组件"
+        }
+      }, template:'#d2',
+      // props数据用来接收父组件的数据
+      props:['mes'],
+      methods: {
+        xinxi(){
+          this.message=this.mes
+        }
+      }
+      
+    });
+
+    
+
+
+    //.局部注册父组件(局部组件,只能在注册过的实例下使用)   
+    //在实例内部注册components:{'组件名',组件内容}（组件内容可以抽取出来单独定义）
+ const zujian1={
+        template:'#d1',
+        data () {
+          return {
+            message:'父组件1',
+            xiaoxi:'我是父组件的内容'
+          }
+        }
+ }
+ const zujian2={
+        template:'#d1',
+        data () {
+          return {
+            message:'组件2'
+          }
+        }
+ }
+ const zujian3={
+        template:'#d1',
+        data () {
+          return {
+            message:'组件3'
+          }
+        }
+ }
+ 
+const one=new Vue({
+    el:'#app',
+    data:{     
+      message:'根组件'
+    },
+   
+    components: {
+      // 'myjsb1':myjsb1
+      //对象字面量增强写法的属性增强写法 
+      'myjsb1':zujian1,
+      // 'myjsb2':zujian2,
+      'myjsb3':zujian3,
+      
+      }   
+     
+    
+})
+
+
+
+
+  </script>
+
+</body>
+</html>

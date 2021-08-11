@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue组件化学习1</title>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <style>
+       
+    </style>
+</head>
+<body>
+
+  <!-- 使用组件 -->
+  <div id="app" >
+    <myjsb1 ></myjsb1> 
+   </div>
+
+
+
+  <!-- 父组件中嵌套子组件 -->
+  <template id="d1">
+    <div>
+      <div>
+        <p>{{num1.default}}</p>
+        <input type="text" @input='ji' v-model="num1.default"/>
+      </div>
+      <myjsb2></myjsb2>
+
+    </div>
+   </template>
+  <!-- 子组件模板 -->
+   <template id="d2">
+      <div>
+        <p>{{num2.default}}</p>    
+        <input type="text" @input='ji' v-model="num2.default"/> 
+      </div>
+   </template>
+
+ 
+
+
+  <script>
+
+    // 2.全局子注册组件(全局组件,可以在多个实例下使用)
+    // Vue.component('使用的组件标签名',组件构造器)template:'#d2'
+  Vue.component('myjsb2',{
+      data () {
+        return {
+          num2:{
+              type:Number,
+              default:0
+            }
+        }
+      }, template:'#d2',
+
+      // props数据用来接收父组件的数据
+      props:['num3'],
+      methods: {
+             fasong(){
+               this.$emit(input, value)
+             },
+             ji(){
+            console.log(this.num2.default);
+          }
+      }
+         
+    });
+
+
+    //.局部注册父组件(局部组件,只能在注册过的实例下使用)   
+    //在实例内部注册components:{'组件名',组件内容}（组件内容可以抽取出来单独定义）
+ const zujian1={
+        template:'#d1',
+        data () {
+          return {
+            num1:{
+              type:Number,
+              default:0
+            },
+            shuju:0
+          }
+        },
+        methods: {
+          // 自定义方法接收子组件发送的数据
+          jieshou(x){         
+             console.log(x);          
+              this.num1.default=x.default
+          },
+          ji(){
+            console.log(this.num1.default);
+          }
+        }
+        
+ }
+
+ 
+const one=new Vue({
+    el:'#app',
+    data:{     
+      message:'根组件'
+    },   
+    components: {
+      //注册父组件
+      'myjsb1':zujian1,      
+      }   
+     
+    
+})
+
+
+
+
+  </script>
+
+</body>
+</html>

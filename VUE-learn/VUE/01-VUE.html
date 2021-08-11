@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.js"></script>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+<!-- 添加移出类     -->
+  <div id="app1">
+    <p v-bind:class='Tclass'>内容</p>
+<!-- 三元运算符     -->
+    <p :class='Bclass?Aclass:""'>内容</p>
+<!-- 对象的写法,判断:后是否为真，如果为真就生效 -->
+    <p :class='{"我是添加的类名":Bclass}'>内容</p>
+    <button @click='show1' v-html='message'></button>
+  </div>
+
+<!-- 实现轮播 -->
+  <div id="app2">
+    <div><img :src="imgsrc[index]" ></div>
+<!-- 轮播按钮 -->
+   <button @click='pre' v-html='message1'></button>
+    <button @click='next' v-html='message2'></button>
+  </div>
+
+<!-- v-for循环    -->
+  <div id="app3">
+    <ul>
+    <li  v-for='(it,index) in arry' >
+        {{index}}+{{it}}={{index+it}}
+        
+    </li> 
+    <li v-for='item in xuesheng'>
+        {{item.name}}
+        {{item.no}}
+    </li>
+    <button @click="add">增加</button>
+    <button @click="jian">删除</button>
+    </ul>
+  </div>
+
+
+<!-- v-on事件修饰符+v-model双向数据绑定    -->
+  <div id="app4">
+   <input v-text='message' @keyup.enter='enterkey' v-model:value="mes"/>
+
+  </div>
+
+
+
+<!-- 案例：记事本    -->
+  <div id="app5">
+    <p>记事本<button @click='jia'>提交</button> </p>
+    <input @keyup.enter='enterkey' v-model="mes" placeholder="mes" />
+     <ul>
+         <li v-for='(it,index) in wenben'>{{it.text}} <button @click='jian(index)'>删除</button></li>
+         <li ><button @click='jianall'>清空</button> </li>
+        <p v-model='num'>一共发了{{num}}篇文章</p>
+     </ul>
+  </div>
+
+
+
+<!-- axios获取笑话 -->
+  <div id="app6">
+    <button @click='huoqu'>获取笑话</button>
+      <p>{{joke}}</p>
+  </div>
+
+
+<!-- v-if与v-else-if联合使用 -->
+
+  <div id="app7">
+          <p v-if='true'>内容</p>
+          <!-- v-if会移出dom；v-show：display:none -->
+          <p v-if='kongzhi'>内容</p>
+          <!-- <p v-show='kongzhi'>内容</p> -->
+          <!-- 必须要写到对应的v-if下面才会生效 -->
+          <p v-else>v-if为flase显示我</p>
+          <!-- <p v-else-if='num>80'>num大于80为flase显示我</p> -->
+          <button @click='show1' v-html='message'></button>
+          
+  </div>
+  
+
+
+<script>
+// 添加移出类 
+  var one1=new Vue({
+        el:'#app1',
+        data:{
+               message:'添加类',
+               Aclass:'我是添加的类名',
+               Bclass:false
+                    
+        },
+        methods:{
+               show1:function(){
+                   if(this.Bclass==true)
+                   {
+
+                    this.Bclass=false;
+                   this.message='添加类';
+                   }
+                  
+    
+                   else{
+                    this.Bclass=true;
+                    this.message='移出类'
+                   }
+               }
+        }
+    })
+
+
+
+// 实现轮播
+
+  var one2=new Vue({
+     el:'#app2',
+       data:{
+               imgsrc:['../img/1.jpg','../img/1.png'],
+                index:0, 
+                message1:"上一张",
+                message2:"下一张"    ,
+                max:1
+        },
+        methods:{
+               pre:function(){
+                      
+                         this.index--; 
+                         this.index=this.index<0?this.max:this.index;
+                          
+               },
+               next:function(){
+                  
+                         this.index++;      
+                         this.index=this.index>1?0:this.index;
+               }
+        }
+    })
+
+
+    
+
+// v-for遍历
+
+  var one3=new Vue({
+        el:'#app3',
+        data:{
+            arry:['1','2'],
+            arry:[1,2,3,4],
+            //  对象数组 
+            xuesheng:[      
+            {xuhao:"ni"},
+            {name:"xiaohong"},
+            {name:"xiaoming"},
+            {no:3},
+            
+                    ]
+            
+                    
+        },
+       methods:{
+              add:function(){
+
+          this.xuesheng.push({no:2});//只有经过v-for遍历的才可以增加否则就增加的是空字符串
+    //    this.xuesheng.push({xuehao:"hao"});
+              },
+              jian:function(){
+                //   shift()默认移出最开始的元素
+                  this.xuesheng.shift();
+
+              }
+             }
+            })
+
+
+
+//v-on事件修饰符+v-model双向数据绑定
+
+   var one4=new Vue({
+        el:'#app4',
+        data:{
+            message:"nihao"  ,
+            mes:'123'  
+        },
+       methods:{
+              enterkey:function(e){
+                  alert('您输入的值是:'+''+this.mes);
+                  e=this.mes;
+                  console.log(e);
+              }
+              
+            }
+})
+
+
+// 记事本
+
+  var one5=new Vue({
+        el:'#app5',
+        data:{
+            mes:"把想说的话记下来吧",
+            jishiben:"记事本",
+            num:0,
+            wenben:[
+                {text:""},
+            ]
+        },
+       methods:{
+              enterkey:function(e){
+                  alert('您输入的值是:'+''+this.mes);
+                  e=this.mes;
+                  console.log(e);
+
+              },
+              jia:function(){
+                        this.wenben.push({text:this.mes})
+                        this.num++;
+              },
+              jian:function(index){
+                this.wenben.splice(index,1);//删除第infdex个，删除1个
+                console.log(index);
+                this.num--; //计数，记录发表文章数
+                this.num=this.num<0?0:this.num
+              } ,
+              jianall:function(index){
+                this.wenben.splice(this.wenben)
+              }            
+            }           
+})
+
+
+
+// axios获取笑话
+  var one6=new Vue({
+        el:'#app6',
+        data:{
+          joke:"这是一个笑话"
+        },
+       methods:{
+         huoqu:function(a){
+            
+               var a=this;
+            axios.get("https://autumnfish.cn/api/joke").then(function(response){
+        
+              
+            a.joke=response.data
+             
+            },function(err){
+            
+
+
+                
+
+            })
+              }
+
+            }
+})
+
+
+// v-if和v-else的联合使用
+const one7=new Vue({
+    el:'#app7',
+    data:{
+           message:'隐藏内容',
+           kongzhi:true,
+           num:78
+    },
+    methods:{
+           show1(){
+               if(this.kongzhi==false)
+               {
+                this.kongzhi=true;
+               this.message='隐藏内容';
+               }
+              
+
+               else{
+                this.kongzhi=false;
+                this.message='显示内容'
+               }
+           }
+    }
+})
+
+</script>
+</body>
+</html>
