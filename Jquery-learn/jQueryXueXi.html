@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+
+    <title>Document</title>
+    <style>
+        body{
+            padding: 0px;
+            border: 0px;
+        }
+        .d1{
+            width: 100%;
+            height: 100px;
+            background-color: royalblue;
+        
+        }
+        
+        .d1>p{
+            padding: 0px;
+           margin: 0px;
+            text-align: center;
+            font-size: 50px;
+            color: red;
+            display: block;
+        }
+        .d2{
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 40px;
+            
+        }
+        .d3{
+            width: 100%;
+            height: 200px;
+
+        }
+        .d2>li{
+            margin: 0px;
+            padding: 0px;
+            width: 25%;
+            height: 30px;
+            float: left;
+            text-align: center;
+            list-style: none;
+            background-color: silver;
+        }
+        .d3>li{
+            float: left;
+            list-style-type: none;
+        }
+        img{
+            width: 200px;
+            height: 200px;
+        }
+        #d4{
+            width: 100%;
+            height: 200px;
+        }
+        #d4>table{
+            width: 100%;
+            height: auto;
+        } 
+        #d4 td{
+            text-align: center;
+        }
+        #d5{
+            width: 20%;
+            height: 200px;
+            position: absolute;
+           left: 40%;
+           top: 50%;
+           background-color: brown;
+        }
+    </style>
+</head>
+<body>
+    <!-- //滑入滑出 -->
+    <div class="d1" >
+        <p>欢迎来到Tom的博客</p>
+       <!-- <button></button> -->
+    </div>
+    <!-- //图片 -->
+    <ul class="d2">
+        <li>第一张</li>
+        <li>第二张</li>
+        <li>第三张</li>
+        <li>第四张</li>
+
+    </ul>
+    <div  class="d3">
+        <li ><img src="../img/1.jpg" alt=""  ></li>
+        <li><img src="../img/2.jpg" alt="" ></li>
+        <li><img src="../img/1.png" alt="" ></li>
+        <li><img src="../img/diedai.png" alt="" ></li>
+    </div>
+    <!-- //表格操作 -->
+    <div id="d4">
+        <button>添加</button>
+        <table border="1">
+            <tr>
+                <td>学号</td>
+                <td>科目</td>
+                <td>分数</td>
+                <td>按钮</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><button>删除</button></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><button>删除</button></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><button>删除</button></td>
+            </tr>
+        
+        </table>
+    </div>
+    <!-- 输入表单值 -->
+    <div id=d5>
+     <p> <span>学号</span><input type="text" id="xh"></p> 
+    <p>   <span>科目</span><input type="text" ></p>
+    <p>  <span>分数</span><input type="text"></p> 
+       <button>提交</button>
+    </div>
+<script  type="text/javascript">
+    //滑入滑出
+    $('.d1').hide().slideDown(700).slideUp(5000);
+    //隐藏所有
+    $('.d3').children('li').hide();
+    //鼠标移入显示其他的隐藏
+    $('.d2').children('li').mouseenter(function(){
+            
+        let a=$(this).index();
+        $('.d3').children('li').hide().stop(true,false).eq(a).fadeIn()//清除队列不到最终效果
+
+    })
+    //隐藏添加数据面板
+    $('#d5').hide();
+    //添加按钮
+    $('#d4>button').click(function(){
+        //显示添加面板
+       
+         $('#d5').show();
+
+        
+    })
+    
+   //添加表单
+    $('#d5>button').click(function(){
+
+
+        var b=$('#xh').val();
+         let c=$('#d5 input').eq(1).val();
+          let d=$('#d5 input:eq(2)').val();
+        console.log(b);
+
+           
+           //隐藏添加数据面板
+           $('#d5').hide();
+           //添加表单和数据    
+           var a=$('<tr>'+
+            '<td>'+b+'</td>'+
+            ' <td>'+c+'</td>'+' <td>'+d+'</td> <td><button>删除</button></td> </tr>');
+           a.appendTo('#d4>table');
+         
+           a.find('button').click(function(){
+               $(this).parent().parent().remove()
+           })
+   
+           })
+
+
+
+      //删除按钮
+      $('#d4').find('td>button').click(function(){
+      $(this).parent().parent().remove();
+    })
+</script>
+</body>
+</html>
