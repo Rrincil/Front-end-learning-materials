@@ -9,8 +9,14 @@
 ## 1.4多线程
 - 客户端进来一个请求就创建一个线程
 = Java多线程
-# 二.Node搜索包的流程
+# 二.Node搜索包的流程及nodemon的使用
+## 2.1Node搜索包的流程
 - 逐级向上一层查找，直至该磁盘根目录
+## 2.2nodemon的使用
+- 解决频繁修改代码重启服务器问题
+- 下载第三方命令行工具 npm install nodemon -g
+- `使用:`nodemon index.js
+- `作用：`可以监听文件变化，当文件发生变化时，会自动重启服务器
 # 三.Buffer缓冲区
 - 客户端以二进制发送的请求存在Buffer中
 - 服务器响应时发送的数据也存在Buffer中
@@ -341,7 +347,8 @@ server.on('request',(req,res)=>{
 ## 6.4.http请求方法http.request(url[, options][, callback])
 - options:{hostname:'',port:'80',method:'post或者get'}port默认80
 
-# 使用art-template
+# 七.使用art-template
+- 安装第三方依赖包 npm install art-template -s
 - art-template不仅可以在浏览器中使用，还可在node中使用
 - 在html文件中引用art-template
 ```javascript
@@ -366,4 +373,62 @@ server.on('request',(req,res)=>{
   </script>
 </body>
 ```
-# express
+# 八.express
+- 安装第三方依赖包 npm install express -s
+## 8.1.使用express
+- 引入express模块
+- http中方法均可使用
+### 8.1.1.配置基本路由:app.get('路径',(req,res)=>{})方法
+```javascript
+const express = require('express')
+//创建app
+const app = express()
+//配置路径:app.get('路径',(req,res)=>{})方法
+//配置首页
+app.get('/',(req,res)=>{
+  // res.send('首页')
+  res.send('首页')
+})
+
+//配置登陆页面
+app.get('/login',(req,res)=>{
+  
+  res.send('这是登陆页面')
+})
+
+
+
+app.listen(3000,()=>{
+  console.log(this);
+  console.log('express is runing');
+})
+```
+
+### 8.1.2.静态服务:app.use(express.static('路径'))方法
+- 直接查找静态资源http://localhost:3000/index.html----查找./public/目录下的index.html
+```javascript
+const express = require('express')
+//创建app
+const app = express()
+//配置静态资源路径；
+//以/开头时，去./public/目录中寻找资源------http://localhost:3000/index.html
+// app.use('/',express.static('./public/'))
+app.use(express.static('./public/'))
+app.get('/',(req,res)=>{
+  // res.send('首页')
+  res.send('首页')
+})
+
+//配置登陆页面
+app.get('/login',(req,res)=>{
+  
+  res.send('这是登陆页面')
+})
+
+
+
+app.listen(3000,()=>{
+  console.log(this);
+  console.log('express is runing');
+})
+```
