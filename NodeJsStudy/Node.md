@@ -489,24 +489,24 @@ app.listen(3000,()=>{
 ```
 
 
-# 九.MongoDB
+# 九.Mongoose和MongoDB
 - `下载：`http://mongodb.org
 - MongoDB 是由C++语言编写的，是一个基于分布式文件存储的开源数据库系统。
 - 在高负载的情况下，添加更多的节点，可以保证服务器性能。
 - MongoDB 旨在为WEB应用提供可扩展的高性能数据存储解决方案。
 - MongoDB 将数据存储为一个文档，数据结构由键值(key=>value)对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。
-## 初识MongoDB
+## 9.1.初识MongoDB
 - https://www.runoob.com/mongodb/nosql.html
 - MongoDB是一个文档数据库，旨在简化开发和扩展
 - MongoDB提供数据库的社区版和企业版：
 * MongoDB社区版是MongoDB的`可用源和免费`版本。
 - MongoDB文档类似于JSON对象。字段的值可以包括其他文档，数组和文档数组。
-## 关系型数据库和非关系型数据库
-### 关系型数据库
+## 9.2.认识：关系型数据库和非关系型数据库
+### 9.2.1.关系型数据库
 - 表就是关系(表与表之间存在关系)所有的关系型数据库都需要用`sql`语言去操作
 - 所有的关系型数据库在操作的时候都需要`设计表结构`
 - 而且数据表还支持`约束`：唯一的，主键，默认值，非空等
-### 非关系型数据库
+### 9.2.2.非关系型数据库
 - 非关系型数据库非常灵活,非关系型数据库可以加入关系数据库
 - 有的非关系型数据库就是`键值对`(key-value)
 - MongoDB是长得最像关系数据库的非关系数据库
@@ -515,14 +515,33 @@ app.listen(3000,()=>{
   - 数据表->集合(数组)
   -表记录->文档对象
 - MongoDB可以任意向里存数据，不用设计表结构，没有结构一说
-##  启动和关闭数据库
-### 启动
+##  9.3.启动和关闭数据库
+### 9.3.1.启动
 -  该磁盘根目录下`新建`/data/db
 - cdm执行mongod查找该磁盘根目录的/data/db启动
-###  关闭
+> 如果想修改存储库目录
+- 执行命令mongod --dbpath=数据存储目录路径
+### 9.3.2.关闭
 - 关闭终端窗口或者ctrl+c
-## 在node中使用Mongoose操作MongoDB
-### Mongoose在node中创建MongoDB数据库
+## 9.4.连接和退出数据库
+- 启动数据库的cmd不要关,再打开一个cmd
+### 9.4.1.`连接:`
+- 输入命令：mongo     (默认连接本机的数据库)
+### 9.4.2.`退出`
+- 输入命令：exit
+## 9.5.操作MongoDB的基本命令
+- 查看显示所有数据库: 
+    > show dbs
+- 查看当前操作的数据库: 
+    > db
+- 切换到指定的数据库(如果没有会新建)
+    > use 数据库名称
+- 查看显示所有集合: 
+    > show collections
+- 查找集合: 
+    > db.字段.find()
+## 9.6.在node中使用Mongoose操作MongoDB
+### 9.6.1.Mongoose在node中创建MongoDB数据库
 - 使用第三方js包Mongoose操作 http://mongoosejs.com
 - 安装:npm install mongoose -s
 ```JavaScript
@@ -545,7 +564,7 @@ kitty.save().then(() => console.log('meow'));
 
 //最终创建一个数据表，在MongoDB中表称之为集合，它的集合就相当于数组，这个数组的名称叫cats(小写复数的集合名称)
 ```
-### 设计集合结构
+### 9.6.2.设计集合结构
 - Schema架构 模式 图标
 ```javascript
 const mongoose = require('mongoose');
@@ -592,4 +611,98 @@ const User = mongoose.model('User', userSchema);
 
 
 //4.当我们有了这个模型构造函数后，就可以使用这个构造函数对users集合中的数据进行 增删改查
+```
+### 9.6.3.新增数据
+- User.save((res,ret)=>{})
+```javascript
+//4.当我们有了这个模型构造函数后，就可以使用这个构造函数对users集合中的数据进行 增删改查
+const admin = new User({
+  name:'admin',
+  password:'123456',
+  email:'admin@admin.com'
+
+})
+admin.save((err,ret)=>{
+  if(!err){
+    console.log(ret);//保存的数据
+  }else{
+    console.log('保存失败');
+  }
+})
+```
+### 9.6.4.查询数据
+- 查询所有：User.find((err,ret)=>{})
+```javascript
+//查询数据
+
+//查询所有
+User.find({
+  name:'张三'
+},(err,ret)=>{
+  if(!err){
+    console.log(ret)
+  }else{
+    console.log('查询失败');
+  
+  }
+})
+
+```
+- 条件查询
+```javascript
+//条件查询：返回数组
+User.find({
+  name:'张三'
+},(err,ret)=>{
+  if(!err){
+    console.log(ret)
+  }else{
+    console.log('查询失败');
+  
+  }
+})
+
+
+//条件查询：返回对象
+User.findOne({
+  name:'张三'
+},(err,ret)=>{
+  if(!err){
+    console.log(ret)
+  }else{
+    console.log('查询失败');
+  
+  }
+})
+```
+### 9.6.5.删除数据 User.remove({数据},(err,ret)=>{})
+```javascript
+//删除所有小红
+User.remove({
+  name:'小红'
+
+},(err,ret)=>{
+  if(!err){
+    console.log('删除成功');
+    console.log(ret);
+
+  }else{
+    console.log('删除失败');
+  }
+})
+```
+### 9.6.6.更新数据 User.findByIdAndUpdate('id',{更新的内容},(err,ret)=>{})
+```javascript
+//根据id更新数据 User.findByIdAndUpdate('id',{更新的内容},(err,ret)=>{})
+User.findByIdAndUpdate('id',{
+  name:'小红'
+},(err,ret)=>{
+  if(!err){
+    console.log(更新成功);
+
+  }else{
+    console.log(更新失败);
+  }
+
+})
 ```
