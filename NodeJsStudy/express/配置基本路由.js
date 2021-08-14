@@ -1,5 +1,5 @@
 const express = require('express')
-//创建app
+//创建app相当于创建服务器
 const app = express()
 //配置路径:app.get('路径',(req,res)=>{})方法
 //配置首页

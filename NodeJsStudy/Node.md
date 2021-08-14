@@ -348,40 +348,95 @@ server.on('request',(req,res)=>{
 - options:{hostname:'',port:'80',method:'post或者get'}port默认80
 
 # 七.使用art-template
-- 安装第三方依赖包 npm install art-template -s
+- 模板引擎最早诞生在服务器领域，后来才发展到前端
 - art-template不仅可以在浏览器中使用，还可在node中使用
-- 在html文件中引用art-template
+- `模板引擎不关心内容，只关心自己能认识的标记语法 {{}}mustache语法`
+- 安装第三方依赖包 npm install art-template -s
+## 7.1.（在浏览器中使用）在html文件中引用art-template
+- `使用方法`: template('script 标签 id',{对象})
 ```javascript
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  //引入脚本
   <script src="../../node_modules/art-template/lib/template-web.js"></script>
   <title>art-template</title>
 </head>
 <body>
   
-
+  //构建模板
   <script type="text/template" id="tpl">
-    hello {{name}}
+    hello {{ name }}
+    我喜欢{{each hobbies}} {{ $value }}  {{/each}}   //each循环hobbies中的值
   </script>
+  //使用模板
   <script>
     const ret = template('tpl',{
-      name:'jack'
+      name:'jack',
+      hobbies:['吃水果','看书','打游戏']
     })
     console.log(ret);
   </script>
 </body>
 ```
+## 7.2.(在node中使用)在js中使用需要引用：const template = require('atr-template')
+- `使用：`template.render('模板字符串',替换对象)
+- `终极抽离模板`，把模板中内容提出到moban.html中，再使用fs.readFile('./public/moban.html',(err,data)={}
+- 使用toString()将fs.readFile中的data转换成字符串
+```javascript
+const template = require('../node_modules/art-template')
+const fs = require('fs')
+//初始抽离模板
+const moban = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>art-template</title>
+</head>
+<body>
+  <P>你好{{name}},'{{name}}'</P>
+</body>
+</html>
+`
+
+
+// template.render('模板字符串',替换对象)
+// const a1 =  template.render('你好{{name}},'{{name}}'',{
+//   name:'jack'
+// })
+// const a2 =  template.render(moban,{
+//   name:'jack'
+// })
+// console.log(a1);
+// console.log(a2);
+
+
+//终极抽离模板，把模板中内容提出到moban.html中，再使用fs.readFile('./public/moban.html',(err,data)={}
+//使用toString()将fs.readFile中的data转换成字符串
+fs.readFile('./public/moban.html',(err,data)=>{
+  if(!err){
+    //默认data读取的是二进制数据
+    const a3 =  template.render(data.toString(),{
+      name:'jack'
+    })
+   console.log(a3);
+  }else{
+    console.log(err);
+  }
+})
+```
 # 八.express
-- 安装第三方依赖包 npm install express -s
+- express(快速)---http://expressjs.com
+- 基于node的web快速开发框架，封装的http
+- 开发者TJ Holowaychuk
+- 安装第三方依赖包 npm ikuainstall express -s
 ## 8.1.使用express
 - 引入express模块
 - http中方法均可使用
 ### 8.1.1.配置基本路由:app.get('路径',(req,res)=>{})方法
 ```javascript
 const express = require('express')
-//创建app
+//创建app相当于创建服务器
 const app = express()
 //配置路径:app.get('路径',(req,res)=>{})方法
 //配置首页
@@ -431,4 +486,110 @@ app.listen(3000,()=>{
   console.log(this);
   console.log('express is runing');
 })
+```
+
+
+# 九.MongoDB
+- `下载：`http://mongodb.org
+- MongoDB 是由C++语言编写的，是一个基于分布式文件存储的开源数据库系统。
+- 在高负载的情况下，添加更多的节点，可以保证服务器性能。
+- MongoDB 旨在为WEB应用提供可扩展的高性能数据存储解决方案。
+- MongoDB 将数据存储为一个文档，数据结构由键值(key=>value)对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。
+## 初识MongoDB
+- https://www.runoob.com/mongodb/nosql.html
+- MongoDB是一个文档数据库，旨在简化开发和扩展
+- MongoDB提供数据库的社区版和企业版：
+* MongoDB社区版是MongoDB的`可用源和免费`版本。
+- MongoDB文档类似于JSON对象。字段的值可以包括其他文档，数组和文档数组。
+## 关系型数据库和非关系型数据库
+### 关系型数据库
+- 表就是关系(表与表之间存在关系)所有的关系型数据库都需要用`sql`语言去操作
+- 所有的关系型数据库在操作的时候都需要`设计表结构`
+- 而且数据表还支持`约束`：唯一的，主键，默认值，非空等
+### 非关系型数据库
+- 非关系型数据库非常灵活,非关系型数据库可以加入关系数据库
+- 有的非关系型数据库就是`键值对`(key-value)
+- MongoDB是长得最像关系数据库的非关系数据库
+  - 关系型数据库->MongoDB
+  - 数据库->数据库
+  - 数据表->集合(数组)
+  -表记录->文档对象
+- MongoDB可以任意向里存数据，不用设计表结构，没有结构一说
+##  启动和关闭数据库
+### 启动
+-  该磁盘根目录下`新建`/data/db
+- cdm执行mongod查找该磁盘根目录的/data/db启动
+###  关闭
+- 关闭终端窗口或者ctrl+c
+## 在node中使用Mongoose操作MongoDB
+### Mongoose在node中创建MongoDB数据库
+- 使用第三方js包Mongoose操作 http://mongoosejs.com
+- 安装:npm install mongoose -s
+```JavaScript
+const mongoose = require('mongoose');
+//连接数据库
+//指定连接的数据库不需要存在,当你插入第一条数据库的时候就会自动创建出来
+mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
+
+//创建一个模型，就是在设计一个数据库
+//MongoDB是动态的非常灵活，只需要在代码中设计你的数据库就可以了
+//mongoose这个包可以让你的设计编写过程变得更简单
+//const Cat = mongoose.model('表名', 数据文档);
+const Cat = mongoose.model('Cat', { name: String });
+
+//实例化一个Cat
+const kitty = new Cat({ name: 'Zildjian' });
+
+//持久化保存这个Kitty实例
+kitty.save().then(() => console.log('meow'));
+
+//最终创建一个数据表，在MongoDB中表称之为集合，它的集合就相当于数组，这个数组的名称叫cats(小写复数的集合名称)
+```
+### 设计集合结构
+- Schema架构 模式 图标
+```javascript
+const mongoose = require('mongoose');
+//1.连接数据库
+//指定连接的数据库不需要存在,当你插入第一条数据库的时候就会自动创建出来
+mongoose.connect('mongodb://localhost:27017/test2', {useNewUrlParser: true, useUnifiedTopology: true});
+
+//2.设计集合结构
+const { Schema } = mongoose;
+
+
+const blogSchema = new Schema({
+  title:  String, // String is shorthand for {type: String}
+  author: String,
+  body:   String,
+  comments: [{ body: String, date: Date }],
+  date: { type: Date, default: Date.now },
+  hidden: Boolean,
+  meta: {
+    votes: Number,
+    favs:  Number
+  }
+});
+
+//2.设计有约束的表结构
+//约束的目的是为了保证数据的完整性，不要有脏数据
+const userSchema = new Schema({
+  name:{
+    type:String,
+    required:true  //必须有的
+  }
+});
+
+
+//3.将文档数据发布为模型Creating a model
+//mongoose.model方法就是用来将一个构架发布为model
+//第一个参数：传入一个大写名词单数字字符串用来表示数据库名-
+//                   mongoose会自动的将大写的名词字符串 生成 小写复数 的集合名称
+//                   例如将User 最终会生成users集合名称
+//第二个参数 ：构架Schema
+
+//返回值：模型构造函数
+const User = mongoose.model('User', userSchema);
+
+
+//4.当我们有了这个模型构造函数后，就可以使用这个构造函数对users集合中的数据进行 增删改查
 ```
