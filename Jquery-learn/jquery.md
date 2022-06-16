@@ -46,14 +46,14 @@ $('li:even')//在li元素中选择索引号为偶数的元素
 - 参照： ![Alt](img/xuanze.png#pic_center)
 - prevAll()找到之前所有的兄弟
 - nextAll()找到之后所有的兄弟
-  ##### (1) 鼠标移入事件 ***
+##### (1) 鼠标移入事件 ***
 - mouseover 在鼠标选取该元素及其子元素时触发事件
 - mouseenter 在鼠标选取该元素时触发事件
-   ##### (2) 鼠标移出事件 ***
+##### (2) 鼠标移出事件 ***
 - mouseout 在鼠标选取该元素及其子元素时触发事件
 - mouseleave 在鼠标选取该元素时触发事件
   >一般有鼠标移入移出事件用mouseenter和mouseleave即只在该元素上触发事件不在其子代上触发
-   ##### (3) Jquery特性： 隐式迭代，链式编程
+##### (3) Jquery特性： 隐式迭代，链式编程
    - 链式编程的特点： 对于一个Jquery方法返回的是Jquery对象所以可以继续点出方法-
    - ![Alt](img/diedai.png#pic_center)
    - 通过筛选选择器孩子兄弟父母来操作DOM节点 
@@ -62,7 +62,7 @@ $('li:even')//在li元素中选择索引号为偶数的元素
   $('#center>li:eq('+index+')')//字符串的拼接可以获取index的值
   $('#enter>li').eq(index)//直接点方法也可以获取index的值
   ```
-  ##### (4) 添加类，移出类 ***
+##### (4) 添加类，移出类 ***
   ```javascript
   $('li').addclass()//添加类
   $('li').removeclass('fontsize: 30px')  //移出类
